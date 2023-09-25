@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+    <head>
+        <!--Load the AJAX API-->
+        <!-- The first line of this example loads the loader itself. You can only load the loader one time no matter how many charts you plan to draw. -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+    
+// Load the Google Charts library
+google.charts.load('current', {packages: ['corechart', 'controls']});
+
+
+// Call the drawChart function when the Google Charts library is loaded to
+google.charts.setOnLoadCallback(drawDashboard);
+
+// Define a function to draw the chart
+function drawDashboard() {
+  // Create a new XMLHttpRequest object
+  var xhr = new XMLHttpRequest();
+
+  // Specify the URL of the API endpoint
+  var url = "https://func090723v3.azurewebsites.net/api/HttpTrigger090723v3";
+
+  // Open a GET request to the URL
+  xhr.open("GET", url);
+
+  // Set the response type to JSON
+  xhr.responseType = "json";
+
+  // Define a callback function to handle the response
+  xhr.onload = function() {
+    // Check if the status is OK
+    if (xhr.status === 200) {
+      // Get the response data as a JSON object
+      var data = xhr.response;
+
+      // Create a new Google DataTable object
+      var dataTable = new google.visualization.DataTable();
+
+      // Add columns to the data table
+      dataTable.addColumn('string', 'Name');
+      dataTable.addColumn('number', 'Order Quantity');
+
+      // Loop through the data and add rows to the data table
+      for (var i = 0; i < data.length; i++) {
+        dataTable.addRow([data[i].title, data[i].order]);
+      }
+
+      console.log(dataTable);
+
+      // Define some options for the chart
+      var options = {
+        title: 'Order Quantities',
+        width: 600,
+        height: 400,
+        legend: 'bottom',
+        backgroundColor: '#ffcc00'
+      };
+
+      // Get the element to display the chart
+      var chartDiv = document.getElementById('chart_div');
+
+    
+
+      var dashboard = new google.visualization.Dashboard(
+        document.getElementById('dashboard_div'));
+      
+      var donutRangeSlider = new google.visualization.ControlWrapper({
+        'controlType': 'NumberRangeFilter',
+        'containerId': 'filter_div',
+        'options': {
+          'filterColumnLabel': 'Order Quantity'
+        }
+      });
+     
+      var pieChart = new google.visualization.ChartWrapper({
+        'chartType': 'PieChart',
+        'containerId': 'chart_div',
+        'options': {
+          'width': 300,
+          'height': 300,
+          'pieSliceText': 'value',
+          'legend': 'right'
+        }
+      });
+
+      dashboard.bind(donutRangeSlider, pieChart);
+
+      dashboard.draw(dataTable);
+
+
+
+    }
+    else {
+      // Handle the error
+      console.error("Request failed: " + xhr.statusText);
+    }
+  };
+
+  // Send the request
+  xhr.send();
+
+  
+}
+
+
+
+        </script>
+      </head>
+    
+      <body>
+          
+          <!--Div that will hold the pie chart-->
+          <div id="dashboard_div">
+            <div id="filter_div"></div>
+            <div id="chart_div"></div>
+          </div>
+
+
+      </body>
+
+</html>

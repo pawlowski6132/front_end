@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>SQL API No Search</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        
+        <script src="" async defer></script>
+
+        <h1>Enter Data</h1>
+            <form action="https://func081823v3.azurewebsites.net/api/httpTrigger1jrpv3">
+                <label for="name_id">Name</label>
+                <input type="text" name="name" placeholder="Title" id="title_id">
+                <p></p>
+                <label for="order_id">Order</label>
+                <input type="number" name="order" placeholder="Order" id="order_id">
+                
+                <input type="submit" name="submit" value="Submit">
+
+
+            </form>
+
+
+            <iframe title="sql_binding_test" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=73655d8a-c441-407f-81ca-7fb9918e0387&autoAuth=true&ctid=cd99fef8-1cd3-4a2a-9bdf-15531181d65e" frameborder="0" allowFullScreen="true"></iframe>
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <style>
+            th{ 
+                color:#a00f0f;
+                    }
+        </style>
+        
+        
+        <table class="table table-striped">
+            <tr  class="bg-info">
+                <th>ID</th>
+                <th>Order</th>
+                <th>Name</th>
+                <th>URL</th>
+                <th>Completed</th>
+            </tr>
+        
+            <tbody id="myTable">
+                
+            </tbody>
+        </table>
+        
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            //var myArray = []
+            
+        
+            $.ajax
+            (
+                {
+                method:'GET',
+                url:'https://func090723v3.azurewebsites.net/api/HttpTrigger090723v3',
+               
+                success:function(response)
+                {
+                    //let jsonResponse = JSON.stringify(response)
+                   let jsonResponse = eval(response)
+                    //var table = document.getElementById('myTable')
+                     buildTable(jsonResponse)
+                    
+                }
+               
+                }
+            )
+
+        function buildTable(data)
+        {
+		    var table = document.getElementById('myTable')
+		    for (var i = 0; i < data.length; i++)
+            {
+			    var row = `<tr>
+					<td>${data[i].Id}</td>
+					<td>${data[i].order}</td>
+					<td>${data[i].title}</td>
+                    <td>${data[i].url}</td>
+                    <td>${data[i].completed}</td>
+					  </tr>`
+			    table.innerHTML += row
+		    }
+	    }  
+            
+        </script>
+    </body>
+</html>
